@@ -2,12 +2,13 @@ package util
 
 import (
 	"fmt"
+	"github.com/thoas/go-funk"
 	"reflect"
 	"strings"
 
+	"github.com/bendt-indonesia/util/enum"
 	"github.com/doug-martin/goqu/v9"
 	"github.com/doug-martin/goqu/v9/exp"
-	"github.com/bendt-indonesia/util/enum"
 )
 
 func GoqDefaultOrderBy(do map[string]string) []exp.OrderedExpression {
@@ -23,7 +24,7 @@ func GoqDefaultOrderBy(do map[string]string) []exp.OrderedExpression {
 	return orderByExp
 }
 
-//return expressions, errorCodeStr ST00016
+// return expressions, errorCodeStr ST00016
 func GoqOrderBy(s interface{}, do map[string]string) []exp.OrderedExpression {
 	var orderByExp []exp.OrderedExpression
 
@@ -66,8 +67,8 @@ func GoqOrderBy(s interface{}, do map[string]string) []exp.OrderedExpression {
 	return orderByExp
 }
 
-//return expressions, errorCodeStr ("ST-00016")
-//chain always use AND
+// return expressions, errorCodeStr ("ST-00016")
+// chain always use AND
 func GoqWhereSyntaxQuery(s interface{}, binaryCols []string) ([]exp.Expression, string) {
 	var whereExp []exp.Expression
 	if reflect.ValueOf(s).IsNil() {
@@ -160,6 +161,58 @@ func GoqWhereSyntaxQueryV2(s interface{}, whereExp []exp.Expression, orWhereExp 
 	return whereExp, ""
 }
 
+func GoqWhereQuotedSyntaxQuery(s interface{}, binaryCols []string, quotedCols []string) ([]exp.Expression, string) {
+
+	var whereExp []exp.Expression
+	if reflect.ValueOf(s).IsNil() {
+		return whereExp, ""
+	}
+
+	var err string
+	var orWhereExp []exp.Expression
+
+	rt := reflect.TypeOf(s).Elem()
+	rv := reflect.ValueOf(s).Elem()
+
+	num := rv.NumField()
+	for i := 0; i < num; i++ {
+		row := rv.Field(i)
+
+		//Check if interface pointer is nil then continue
+		//It means no sort present for that field
+		if row.IsNil() {
+			continue
+		}
+
+		//Check where name by using db tag
+		fd := rt.Field(i).Tag.Get("db")
+		tp := rt.Field(i).Type.String()
+		if fd == "" || tp != "*model.SearchSyntax" {
+			continue
+		}
+
+		if funk.ContainsString(quotedCols, fd) {
+			fd = "`" + fd + "`"
+		}
+
+		con := reflect.ValueOf(row.Interface()).Elem().FieldByName("Connective")
+		q := reflect.ValueOf(row.Interface()).Elem().FieldByName("Keywords").Elem().String()
+		com := reflect.ValueOf(row.Interface()).Elem().FieldByName("Comparator")
+
+		whereExp, orWhereExp, err = GoqAppendWhereExp(whereExp, orWhereExp, &fd, binaryCols, &com, &q, &con)
+		if err != "" {
+			return whereExp, err
+		}
+	}
+
+	//OR where group expressions
+	whereExp = append(whereExp, goqu.Or(
+		orWhereExp...,
+	))
+
+	return whereExp, ""
+}
+
 func GoqAndGroupWhereSyntax(s interface{}) (exp.Expression, string) {
 	var whereExp exp.Expression
 	if reflect.ValueOf(s).IsNil() {
@@ -178,7 +231,7 @@ func GoqAndGroupWhereSyntax(s interface{}) (exp.Expression, string) {
 	return whereExp, ""
 }
 
-//return andWhereExpressions, orWhereExpressions, errorCodeStr ("ST-00016")
+// return andWhereExpressions, orWhereExpressions, errorCodeStr ("ST-00016")
 func GoqAppendWhereExp(andWhereExpression []exp.Expression, orExpressionLists []exp.Expression, fd *string, binaryCols []string, com *reflect.Value, q *string, con *reflect.Value) ([]exp.Expression, []exp.Expression, string) {
 
 	//fmt.Println("=====================t=====================", con.IsNil())
@@ -245,7 +298,7 @@ func GoqAppendWhereExp(andWhereExpression []exp.Expression, orExpressionLists []
 
 		return andWhereExpression, orExpressionLists, ""
 	case enum.ComparatorEqualsTo:
-		exp := goqu.L(field + " = ?",keywords)
+		exp := goqu.L(field+" = ?", keywords)
 		if strings.ToLower(keywords) == "null" {
 			exp = goqu.L(field + " IS NULL")
 		}
@@ -265,13 +318,13 @@ func GoqAppendWhereExp(andWhereExpression []exp.Expression, orExpressionLists []
 		if conn == enum.ConnectiveAnd {
 			andWhereExpression = append(andWhereExpression,
 				goqu.And(
-					goqu.L(field + " = ?",keywords),
+					goqu.L(field+" = ?", keywords),
 				),
 			)
 		} else {
 			orExpressionLists = append(orExpressionLists,
 				goqu.Or(
-					goqu.L(field + " > ?",keywords),
+					goqu.L(field+" > ?", keywords),
 				),
 			)
 		}
@@ -280,13 +333,13 @@ func GoqAppendWhereExp(andWhereExpression []exp.Expression, orExpressionLists []
 		if conn == enum.ConnectiveAnd {
 			andWhereExpression = append(andWhereExpression,
 				goqu.And(
-					goqu.L(field + " >= ?",keywords),
+					goqu.L(field+" >= ?", keywords),
 				),
 			)
 		} else {
 			orExpressionLists = append(orExpressionLists,
 				goqu.Or(
-					goqu.L(field + " >= ?",keywords),
+					goqu.L(field+" >= ?", keywords),
 				),
 			)
 		}
@@ -295,13 +348,13 @@ func GoqAppendWhereExp(andWhereExpression []exp.Expression, orExpressionLists []
 		if conn == enum.ConnectiveAnd {
 			andWhereExpression = append(andWhereExpression,
 				goqu.And(
-					goqu.L(field + " < ?",keywords),
+					goqu.L(field+" < ?", keywords),
 				),
 			)
 		} else {
 			orExpressionLists = append(orExpressionLists,
 				goqu.Or(
-					goqu.L(field + " < ?",keywords),
+					goqu.L(field+" < ?", keywords),
 				),
 			)
 		}
@@ -310,13 +363,13 @@ func GoqAppendWhereExp(andWhereExpression []exp.Expression, orExpressionLists []
 		if conn == enum.ConnectiveAnd {
 			andWhereExpression = append(andWhereExpression,
 				goqu.And(
-					goqu.L(field + " <= ?",keywords),
+					goqu.L(field+" <= ?", keywords),
 				),
 			)
 		} else {
 			orExpressionLists = append(orExpressionLists,
 				goqu.Or(
-					goqu.L(field + " <= ?",keywords),
+					goqu.L(field+" <= ?", keywords),
 				),
 			)
 		}
@@ -327,13 +380,13 @@ func GoqAppendWhereExp(andWhereExpression []exp.Expression, orExpressionLists []
 		if conn == enum.ConnectiveAnd {
 			andWhereExpression = append(andWhereExpression,
 				goqu.And(
-					goqu.L(field + " IN ?", qs),
+					goqu.L(field+" IN ?", qs),
 				),
 			)
 		} else {
 			orExpressionLists = append(orExpressionLists,
 				goqu.Or(
-					goqu.L(field + " IN ?", qs),
+					goqu.L(field+" IN ?", qs),
 				),
 			)
 		}
@@ -344,13 +397,13 @@ func GoqAppendWhereExp(andWhereExpression []exp.Expression, orExpressionLists []
 		if conn == enum.ConnectiveAnd {
 			andWhereExpression = append(andWhereExpression,
 				goqu.And(
-					goqu.L(field + " NOT IN ?", qs),
+					goqu.L(field+" NOT IN ?", qs),
 				),
 			)
 		} else {
 			orExpressionLists = append(orExpressionLists,
 				goqu.Or(
-					goqu.L(field + " NOT IN ?", qs),
+					goqu.L(field+" NOT IN ?", qs),
 				),
 			)
 		}
@@ -360,15 +413,15 @@ func GoqAppendWhereExp(andWhereExpression []exp.Expression, orExpressionLists []
 		if conn == enum.ConnectiveAnd {
 			andWhereExpression = append(andWhereExpression,
 				goqu.And(
-					goqu.L(field + " >= ?",keywords),
-					goqu.L(field + " <= ?",keywords2),
+					goqu.L(field+" >= ?", keywords),
+					goqu.L(field+" <= ?", keywords2),
 				),
 			)
 		} else {
 			orExpressionLists = append(orExpressionLists,
 				goqu.Or(
-					goqu.L(field + " >= ?",keywords),
-					goqu.L(field + " <= ?",keywords2),
+					goqu.L(field+" >= ?", keywords),
+					goqu.L(field+" <= ?", keywords2),
 				),
 			)
 		}
@@ -378,15 +431,15 @@ func GoqAppendWhereExp(andWhereExpression []exp.Expression, orExpressionLists []
 		if conn == enum.ConnectiveAnd {
 			andWhereExpression = append(andWhereExpression,
 				goqu.And(
-					goqu.L(field + " < ?",keywords),
-					goqu.L(field + " > ?",keywords2),
+					goqu.L(field+" < ?", keywords),
+					goqu.L(field+" > ?", keywords2),
 				),
 			)
 		} else {
 			orExpressionLists = append(orExpressionLists,
 				goqu.Or(
-					goqu.L(field + " < ?",keywords),
-					goqu.L(field + " > ?",keywords2),
+					goqu.L(field+" < ?", keywords),
+					goqu.L(field+" > ?", keywords2),
 				),
 			)
 		}
