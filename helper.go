@@ -1,7 +1,6 @@
 package util
 
 import (
-	"encoding/json"
 	"fmt"
 	"math/rand"
 	"path/filepath"
@@ -11,7 +10,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/sirupsen/logrus"
 	"github.com/thoas/go-funk"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -34,21 +32,6 @@ func FormatUid(uid string) string {
 func IsValidUUID(u string) bool {
 	_, err := uuid.Parse(u)
 	return err == nil
-}
-
-// HashPassword hashes given password
-func HashPassword(password string) string {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 11)
-
-	if err != nil {
-		logrus.WithFields(logrus.Fields{
-			"file":  "util",
-			"func":  "HashPassword",
-			"error": err,
-		}).Error("Unable to Hash Password")
-	}
-
-	return string(bytes)
 }
 
 // Check if phone begin with zero, then add country code
@@ -143,12 +126,4 @@ func ComposeUploadFileNameV2(n string, aliasName *string) string {
 	ts := RandomTimestampStr()
 
 	return fileName + "-" + ts + ext
-}
-
-func ToJSON(v interface{}) string {
-	jsonStr, err := json.Marshal(v)
-	if err != nil {
-		return ""
-	}
-	return string(jsonStr)
 }
