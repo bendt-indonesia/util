@@ -7,6 +7,8 @@ import (
 	"encoding/json"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
+	"strconv"
+	"strings"
 )
 
 func GenerateHMAC(signed string, secret string) string {
@@ -44,4 +46,12 @@ func ToByte(v interface{}) []byte {
 		return nil
 	}
 	return jsonStr
+}
+
+func UnescapeUnicodeCharactersInJSON(_jsonRaw json.RawMessage) (json.RawMessage, error) {
+	str, err := strconv.Unquote(strings.Replace(strconv.Quote(string(_jsonRaw)), `\\u`, `\u`, -1))
+	if err != nil {
+		return nil, err
+	}
+	return []byte(str), nil
 }
