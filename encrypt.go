@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"github.com/linkedin/goavro"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 	"strconv"
@@ -54,4 +55,41 @@ func UnescapeUnicodeCharactersInJSON(_jsonRaw json.RawMessage) (json.RawMessage,
 		return nil, err
 	}
 	return []byte(str), nil
+}
+
+func DecodeAvro(avroData []byte, schema string) map[string]interface{} {
+	// Create an Avro codec for the message
+	codec, err := goavro.NewCodec(schema)
+	if err != nil {
+		return nil
+	}
+
+	// Decode Avro data to a map
+	decoded, _, err := codec.NativeFromBinary(avroData)
+	if err != nil {
+		return nil
+	}
+
+	// Convert the decoded data to a map
+	data, ok := decoded.(map[string]interface{})
+	if !ok {
+		return nil
+	}
+
+	return data
+}
+
+func EncodeAvro(messageMap map[string]interface{}, schema string) []byte {
+	// Create an Avro codec for the message
+	codec, err := goavro.NewCodec(schema)
+	if err != nil {
+		return nil
+	}
+	// Encode the message to Avro binary format
+	avroData, err := codec.BinaryFromNative(nil, messageMap)
+	if err != nil {
+		return nil
+	}
+
+	return avroData
 }

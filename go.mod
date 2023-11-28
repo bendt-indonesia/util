@@ -16,6 +16,8 @@ require (
 )
 
 require (
+	github.com/golang/snappy v0.0.4 // indirect
+	github.com/linkedin/goavro v2.1.0+incompatible // indirect
 	github.com/sosodev/duration v1.1.0 // indirect
 	github.com/vektah/gqlparser/v2 v2.5.10 // indirect
 	golang.org/x/sys v0.14.0 // indirect
