@@ -54,12 +54,13 @@ func ValidatePhoneNumber(phone *string, allowedPrefix []string) error {
 	if len(allowedPrefix) > 0 {
 		var prefixMsg string
 		for _, beginWith := range allowedPrefix {
-			prefixMsg = beginWith + ", "
+			prefixMsg += beginWith + ", "
 		}
 		prefixMsg = TrimSuffix(prefixMsg, ", ")
 		for _, beginWith := range allowedPrefix {
 			l := len(beginWith)
 			prefix := checkPhoneNo[:l]
+			fmt.Println("Check Prefix ", prefix, " beginWithLen: ", l, "beginWith:", beginWith)
 			if !funk.ContainsString(allowedPrefix, prefix) {
 				return fmt.Errorf(fmt.Sprintf("Nomor Handphone harap diawali dengan %s", prefixMsg))
 			}
