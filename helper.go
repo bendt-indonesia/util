@@ -45,9 +45,9 @@ func PhonePrefix(phone string) string {
 	return phone
 }
 
-func ValidatePhoneNumber(phone *string, allowedPrefix []string) error {
+func ValidatePhoneNumber(phone *string, allowedPrefix []string) (string, error) {
 	if phone == nil || len(*phone) <= 8 {
-		return fmt.Errorf("Nomor handphone minimal 10 angka")
+		return "", fmt.Errorf("Nomor handphone minimal 10 angka")
 	}
 
 	checkPhoneNo := PhonePrefix(*phone)
@@ -60,14 +60,14 @@ func ValidatePhoneNumber(phone *string, allowedPrefix []string) error {
 		for _, beginWith := range allowedPrefix {
 			l := len(beginWith)
 			prefix := checkPhoneNo[:l]
-			fmt.Println("Check Prefix ", prefix, " beginWithLen: ", l, "beginWith:", beginWith)
-			if !funk.ContainsString(allowedPrefix, prefix) {
-				return fmt.Errorf(fmt.Sprintf("Nomor Handphone harap diawali dengan %s", prefixMsg))
+			if funk.ContainsString(allowedPrefix, prefix) {
+				return checkPhoneNo, nil
 			}
 		}
+		return checkPhoneNo, fmt.Errorf(fmt.Sprintf("Nomor Handphone harap diawali dengan %s", prefixMsg))
 	}
 
-	return nil
+	return checkPhoneNo, nil
 }
 
 // CheckPassword hash compares raw password with it's hashed values
