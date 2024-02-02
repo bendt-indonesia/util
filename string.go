@@ -15,19 +15,19 @@ import (
 	"golang.org/x/text/message"
 )
 
-//Boolean func returns boolean value of string value like on, off, 0, 1, yes, no
+// Boolean func returns boolean value of string value like on, off, 0, 1, yes, no
 func Boolean(str string) bool {
 	b := stringy.New(str)
 	return b.Boolean()
 }
 
-//HelloWorld
+// HelloWorld
 func CamelCase(str string) string {
 	camelCase := stringy.New(str)
 	return camelCase.CamelCase()
 }
 
-//HelloWorlds
+// HelloWorlds
 func CamelCasePlural(str string) string {
 	camelCase := stringy.New(Plural(str))
 	return camelCase.CamelCase()
@@ -43,42 +43,42 @@ func ContainsAll(str string, in ...string) bool {
 	return contains.ContainsAll(in...)
 }
 
-//This paragraph is too long...
+// This paragraph is too long...
 func Excerpt(paragraph string, maxLength int) string {
 	s := stringy.New(paragraph)
 	return s.Tease(maxLength, "...")
 }
 
-//hello-world-morning
+// hello-world-morning
 func KebabCase(str string) string {
 	c := stringy.New(str)
 	return c.KebabCase("?", "").ToLower()
 }
 
-//HELLO-WORLD-MORNING
+// HELLO-WORLD-MORNING
 func KebabCaseUpper(str string) string {
 	c := stringy.New(str)
 	return c.KebabCase("?", "").ToUpper()
 }
 
-//helloWorld
+// helloWorld
 func LowerCamelCase(str string) string {
 	cc := CamelCase(str)
 	return stringy.New(cc).LcFirst()
 }
 
-//helloWorlds
+// helloWorlds
 func LowerCamelCasePlural(str string) string {
 	cc := CamelCase(Plural(str))
 	return stringy.New(cc).LcFirst()
 }
 
-//HelloWorlds
+// HelloWorlds
 func Plural(str string) string {
 	return pluralize.NewClient().Plural(str)
 }
 
-//Prefix makes sure string has been prefixed with a given string and avoids adding it again if it has
+// Prefix makes sure string has been prefixed with a given string and avoids adding it again if it has
 func Prefix(str string, prefix string) string {
 	pre := stringy.New(str)
 	return pre.Prefix(prefix)
@@ -98,19 +98,19 @@ func Singular(str string) string {
 	return pluralize.NewClient().Singular(str)
 }
 
-//hello_world_morning
+// hello_world_morning
 func SnakeCase(str string) string {
 	snakeCase := stringy.New(str)
 	return snakeCase.SnakeCase("?", "").ToLower()
 }
 
-//HELLO_WORLD_MORNING
+// HELLO_WORLD_MORNING
 func SnakeCaseUpper(str string) string {
 	snakeCase := stringy.New(str)
 	return snakeCase.SnakeCase("?", "").ToUpper()
 }
 
-func StrPad(str string,  len int, ltr string, padStyle string) string {
+func StrPad(str string, len int, ltr string, padStyle string) string {
 	s := stringy.New(str)
 
 	//It can be right / center
@@ -124,31 +124,31 @@ func StrPad(str string,  len int, ltr string, padStyle string) string {
 	return s.Pad(len, ltr, "left")
 }
 
-//0000Hello
+// 0000Hello
 func StrPadLeft(str string, len int, ltr string) string {
 	s := stringy.New(str)
 	return s.Pad(len, ltr, "left")
 }
 
-//Hello0000
+// Hello0000
 func StrPadRight(str string, len int, ltr string) string {
 	s := stringy.New(str)
 	return s.Pad(len, ltr, "right")
 }
 
-//Suffix makes sure string has been suffixed with a given string and avoids adding it again if it has.
+// Suffix makes sure string has been suffixed with a given string and avoids adding it again if it has.
 func Suffix(str string, postfix string) string {
 	suf := stringy.New(str)
 	return suf.Suffix(postfix)
 }
 
-//ben + "'" => returned 'ben'
+// ben + "'" => returned 'ben'
 func StrQuoted(str string, by string) string {
 	s := stringy.New(str)
 	return s.Surround(by)
 }
 
-//Remove the last string based on suffix provided
+// Remove the last string based on suffix provided
 func TrimSuffix(s, suffix string) string {
 	if strings.HasSuffix(s, suffix) {
 		s = s[:len(s)-len(suffix)]
@@ -172,28 +172,30 @@ func TrimAllWhiteSpaces(s string) string {
 	pattern := regexp.MustCompile(`\s+`)
 	return pattern.ReplaceAllString(s, " ")
 }
-//First letter capitalize
+
+// First letter capitalize
 func UcFirst(str string) string {
 	c := stringy.New(str)
 	return c.UcFirst()
 }
-//All letter capitalize
+
+// All letter capitalize
 func StrToUpper(str string) string {
 	return strings.ToUpper(str)
 }
 
-//eb0ae4d9a87f4fd6b2e17d7cbab71853
-//output: "eb0ae4d9-a87f-4fd6-b2e1-7d7cbab71853"
+// eb0ae4d9a87f4fd6b2e17d7cbab71853
+// output: "eb0ae4d9-a87f-4fd6-b2e1-7d7cbab71853"
 func HexToUUID(hex string) string {
-	uuid := hex[0:8]+"-"+hex[8:12]+"-"+hex[12:16]+"-"+hex[16:20]+"-"+hex[20:]
+	uuid := hex[0:8] + "-" + hex[8:12] + "-" + hex[12:16] + "-" + hex[16:20] + "-" + hex[20:]
 	return strings.ToLower(uuid)
 }
 
 func ReplaceAll(text string, oldStr string, newStr string) string {
-	return strings.ReplaceAll(text, oldStr,newStr)
+	return strings.ReplaceAll(text, oldStr, newStr)
 }
 
-//Random string with length input
+// Random string with length input
 func RandomString(length int) string {
 	rand.Seed(time.Now().UnixNano())
 	b := make([]byte, length)
@@ -201,7 +203,7 @@ func RandomString(length int) string {
 	return fmt.Sprintf("%x", b)[:length]
 }
 
-//Remove All WhiteSpace
+// Remove All WhiteSpace
 func RemoveWhitespace(str string) string {
 	var b strings.Builder
 	b.Grow(len(str))
@@ -226,7 +228,7 @@ func NumberFormat64(num int64) string {
 func FloatNumberFormat(num float64, precisions int) string {
 	ps := ""
 	if precisions >= 0 {
-		ps = fmt.Sprintf(".%d",precisions)
+		ps = fmt.Sprintf(".%d", precisions)
 	}
 	p := message.NewPrinter(language.English)
 	return p.Sprintf("%"+ps+"f", num)
@@ -285,4 +287,8 @@ func IsLower(s string) bool {
 		}
 	}
 	return true
+}
+
+func Nl2br(str string) string {
+	return strings.Replace(str, "\n", "<br />", -1)
 }
