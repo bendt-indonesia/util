@@ -35,3 +35,23 @@ func PrecisionStr(s string, precision int) string {
 	}
 	return s
 }
+
+func Markup(markupType string, markupBy, baseNumber float64) float64 {
+	if markupType == "FLAT_PRICE" {
+		return baseNumber
+	} else if markupType == "FIXED" {
+		baseNumber += markupBy
+	} else if markupType == "PERCENTAGE" {
+		baseNumber = math.Round((100 + markupBy) / 100 * baseNumber)
+	} else if markupType == "MARGIN_PERCENTAGE" {
+		baseNumber = baseNumber / ((100 - markupBy) / 100)
+	}
+
+	return baseNumber
+}
+
+func CalculateMarkup(markupType string, markupBy, baseNumber float64) float64 {
+	baseNumber = Markup(markupType, markupBy, baseNumber)
+	baseNumber = RoundPrice(baseNumber)
+	return baseNumber
+}
