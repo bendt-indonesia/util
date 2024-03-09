@@ -49,6 +49,27 @@ func Excerpt(paragraph string, maxLength int) string {
 	return s.Tease(maxLength, "...")
 }
 
+// ExtractPrefix("Ben Walandow",3) => will return "Ben"
+// ExtractPrefix("Ben",5) => will return "Ben"
+func ExtractPrefix(s string, chars int) string {
+	if chars > len(s) {
+		return s
+	}
+
+	return s[:chars]
+}
+
+// ExtractSuffix("Ben Walandow",3) => will return "dow"
+// ExtractSuffix("Ben",5) => will return "Ben"
+func ExtractSuffix(s string, chars int) string {
+	l := len(s)
+	if chars > l {
+		return s
+	}
+	s = s[l-chars : l]
+	return s
+}
+
 // hello-world-morning
 func KebabCase(str string) string {
 	c := stringy.New(str)
@@ -155,6 +176,7 @@ func TrimSuffix(s, suffix string) string {
 	}
 	return s
 }
+
 func TrimPrefix(s, prefix string) string {
 	if len(prefix) > len(s) {
 		return s
@@ -167,6 +189,7 @@ func TrimPrefix(s, prefix string) string {
 
 	return s
 }
+
 func TrimAllWhiteSpaces(s string) string {
 	s = strings.TrimSpace(s)
 	pattern := regexp.MustCompile(`\s+`)
