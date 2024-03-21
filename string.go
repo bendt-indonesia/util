@@ -24,13 +24,13 @@ func Boolean(str string) bool {
 // HelloWorld
 func CamelCase(str string) string {
 	camelCase := stringy.New(str)
-	return camelCase.CamelCase()
+	return string(camelCase.CamelCase())
 }
 
 // HelloWorlds
 func CamelCasePlural(str string) string {
 	camelCase := stringy.New(Plural(str))
-	return camelCase.CamelCase()
+	return string(camelCase.CamelCase())
 }
 
 func CleanStringLowered(str string) string {
@@ -46,7 +46,7 @@ func ContainsAll(str string, in ...string) bool {
 // This paragraph is too long...
 func Excerpt(paragraph string, maxLength int) string {
 	s := stringy.New(paragraph)
-	return s.Tease(maxLength, "...")
+	return string(s.Tease(maxLength, "..."))
 }
 
 // ExtractPrefix("Ben Walandow",3) => will return "Ben"
@@ -73,25 +73,25 @@ func ExtractSuffix(s string, chars int) string {
 // hello-world-morning
 func KebabCase(str string) string {
 	c := stringy.New(str)
-	return c.KebabCase("?", "").ToLower()
+	return string(c.KebabCase("?", "").ToLower())
 }
 
 // HELLO-WORLD-MORNING
 func KebabCaseUpper(str string) string {
 	c := stringy.New(str)
-	return c.KebabCase("?", "").ToUpper()
+	return string(c.KebabCase("?", "").ToUpper())
 }
 
 // helloWorld
 func LowerCamelCase(str string) string {
 	cc := CamelCase(str)
-	return stringy.New(cc).LcFirst()
+	return string(stringy.New(cc).LcFirst())
 }
 
 // helloWorlds
 func LowerCamelCasePlural(str string) string {
 	cc := CamelCase(Plural(str))
-	return stringy.New(cc).LcFirst()
+	return string(stringy.New(cc).LcFirst())
 }
 
 // HelloWorlds
@@ -102,17 +102,17 @@ func Plural(str string) string {
 // Prefix makes sure string has been prefixed with a given string and avoids adding it again if it has
 func Prefix(str string, prefix string) string {
 	pre := stringy.New(str)
-	return pre.Prefix(prefix)
+	return string(pre.Prefix(prefix))
 }
 
 func RemoveSpecialCharacter(str string) string {
 	s := stringy.New(str)
-	return s.RemoveSpecialCharacter()
+	return string(s.RemoveSpecialCharacter())
 }
 
 func ReplaceFirst(str string, search string, replace string) string {
 	s := stringy.New(str)
-	return s.ReplaceFirst(search, replace)
+	return string(s.ReplaceFirst(search, replace))
 }
 
 func Singular(str string) string {
@@ -122,13 +122,13 @@ func Singular(str string) string {
 // hello_world_morning
 func SnakeCase(str string) string {
 	snakeCase := stringy.New(str)
-	return snakeCase.SnakeCase("?", "").ToLower()
+	return string(snakeCase.SnakeCase("?", "").ToLower())
 }
 
 // HELLO_WORLD_MORNING
 func SnakeCaseUpper(str string) string {
 	snakeCase := stringy.New(str)
-	return snakeCase.SnakeCase("?", "").ToUpper()
+	return string(snakeCase.SnakeCase("?", "").ToUpper())
 }
 
 func StrPad(str string, len int, ltr string, padStyle string) string {
@@ -142,31 +142,31 @@ func StrPad(str string, len int, ltr string, padStyle string) string {
 	}
 
 	//return 0000hello (default)
-	return s.Pad(len, ltr, "left")
+	return string(s.Pad(len, ltr, "left"))
 }
 
 // 0000Hello
 func StrPadLeft(str string, len int, ltr string) string {
 	s := stringy.New(str)
-	return s.Pad(len, ltr, "left")
+	return string(s.Pad(len, ltr, "left"))
 }
 
 // Hello0000
 func StrPadRight(str string, len int, ltr string) string {
 	s := stringy.New(str)
-	return s.Pad(len, ltr, "right")
+	return string(s.Pad(len, ltr, "right"))
 }
 
 // Suffix makes sure string has been suffixed with a given string and avoids adding it again if it has.
 func Suffix(str string, postfix string) string {
 	suf := stringy.New(str)
-	return suf.Suffix(postfix)
+	return string(suf.Suffix(postfix))
 }
 
 // ben + "'" => returned 'ben'
 func StrQuoted(str string, by string) string {
 	s := stringy.New(str)
-	return s.Surround(by)
+	return string(s.Surround(by))
 }
 
 // Remove the last string based on suffix provided
@@ -199,7 +199,7 @@ func TrimAllWhiteSpaces(s string) string {
 // First letter capitalize
 func UcFirst(str string) string {
 	c := stringy.New(str)
-	return c.UcFirst()
+	return string(c.UcFirst())
 }
 
 // All letter capitalize
