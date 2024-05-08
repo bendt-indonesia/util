@@ -1,5 +1,7 @@
 package util
 
+import "time"
+
 func NilBool(value bool) *bool {
 	return &value
 }
@@ -93,4 +95,8 @@ func NilFloat64(value float64, allowEmptyValue bool) *float64 {
 		return nil
 	}
 	return &value
+}
+
+func NilTime(t time.Time) *time.Time {
+	return &t
 }
