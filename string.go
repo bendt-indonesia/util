@@ -294,6 +294,12 @@ func ExtractFloatFromAnyString(s string) float64 {
 	return fn
 }
 
+func SanitizeStringNumber(s string) string {
+	rg := regexp.MustCompile(`[0-9]+`)
+	matches := rg.FindAllString(s, -1)
+	return strings.Join(matches, "")
+}
+
 func IsUpper(s string) bool {
 	for _, r := range s {
 		if !unicode.IsUpper(r) && unicode.IsLetter(r) {
