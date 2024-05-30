@@ -59,37 +59,64 @@ var INDONESIA_PROVIDERS = []string{
 	"62831",
 }
 
-// allowedPrefix = country code ( ex 62 )
-func ValidatePhoneNo(n string, allowedPrefix []string) error {
-	ph := SanitizeStringNumber(n)
-	ph = PhonePrefix(ph)
+// Check if phone begin with zero, then add country code
+func PhonePrefix(phone string) string {
+	phone = SanitizeStringNumber(phone)
+	if len(phone) >= 1 {
+		if phone[:1] == "0" {
+			phone = "62" + phone[1:]
+		}
+	}
+	return phone
+}
 
-	if len(ph) < 5 {
-		return fmt.Errorf("Nomor handphone minimal adalah 5 digit")
+func ValidatePhoneNo(n interface{}, allowedPrefix []string) error {
+	_, err := ValidatePhoneNumber(n, allowedPrefix)
+	return err
+}
+
+func ValidatePhoneNumber(n interface{}, allowedPrefix []string) (string, error) {
+	var ps string
+	if w, ok := n.(string); ok {
+		ps = w
+	}
+	if w, ok := n.(*string); ok {
+		ps = *w
 	}
 
+	ps = SanitizeStringNumber(ps)
+	//Minimum Phone String is 5 digit , for PhonePrefix Prerequisities
+	if len(ps) <= 5 {
+		return ps, fmt.Errorf("Nomor handphone minimal adalah 5 digit")
+	}
+
+	ps = PhonePrefix(ps)
 	for _, pf := range allowedPrefix {
 		pfl := len(pf)
-		phonePrefix := ph[:pfl]
+		if len(ps) < pfl {
+			return ps, fmt.Errorf(fmt.Sprintf("Nomor handphone minimal adalah %d digit", pfl))
+		}
+		phonePrefix := ps[:pfl]
 		if phonePrefix == pf {
 			if pf == "62" {
-				if len(ph) < 10 {
-					return fmt.Errorf("Nomor handphone minimal adalah 10 digit")
+				if len(ps) < 10 {
+					return ps, fmt.Errorf("Nomor handphone minimal adalah 10 digit")
 				}
-				if funk.ContainsString(INDONESIA_PROVIDERS, ph[:5]) {
-					return nil
+				if funk.ContainsString(INDONESIA_PROVIDERS, ps[:5]) {
+					return ps, nil
 				}
+				return ps, fmt.Errorf("Provider Nomor handphone tidak dikenali (Indonesia)")
 			}
 
 			//Phone prefix is passed or whitelisted in allowedPrefix
-			return nil
+			return ps, nil
 		}
 
 	}
 
 	if len(allowedPrefix) > 0 {
-		return fmt.Errorf("Nomor handphone `%s` tidak dapat digunakan.")
+		return ps, fmt.Errorf("Nomor handphone `%s` tidak dapat digunakan.", ps)
 	}
 
-	return nil
+	return ps, nil
 }

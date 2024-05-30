@@ -34,42 +34,6 @@ func IsValidUUID(u string) bool {
 	return err == nil
 }
 
-// Check if phone begin with zero, then add country code
-func PhonePrefix(phone string) string {
-	if phone[:1] == "+" {
-		phone = phone[1:]
-	}
-	if phone[:1] == "0" {
-		phone = "62" + phone[1:]
-	}
-	return phone
-}
-
-func ValidatePhoneNumber(phone *string, allowedPrefix []string) (string, error) {
-	if phone == nil || len(*phone) <= 8 {
-		return "", fmt.Errorf("Nomor handphone minimal 10 angka")
-	}
-
-	checkPhoneNo := PhonePrefix(*phone)
-	if len(allowedPrefix) > 0 {
-		var prefixMsg string
-		for _, beginWith := range allowedPrefix {
-			prefixMsg += beginWith + ", "
-		}
-		prefixMsg = TrimSuffix(prefixMsg, ", ")
-		for _, beginWith := range allowedPrefix {
-			l := len(beginWith)
-			prefix := checkPhoneNo[:l]
-			if funk.ContainsString(allowedPrefix, prefix) {
-				return checkPhoneNo, nil
-			}
-		}
-		return checkPhoneNo, fmt.Errorf(fmt.Sprintf("Nomor Handphone harap diawali dengan %s", prefixMsg))
-	}
-
-	return checkPhoneNo, nil
-}
-
 // CheckPassword hash compares raw password with it's hashed values
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
