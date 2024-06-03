@@ -45,12 +45,13 @@ func CreateEmptyExcelFile() *excelize.File {
 	return f
 }
 
-func CreateNewSheet(f *excelize.File, sheetName string) (*excelize.File, int, error) {
+// return sheetIdx, error
+func CreateNewSheet(f *excelize.File, sheetName string) (int, error) {
 	index, err := f.NewSheet(sheetName)
 	if err != nil {
-		return nil, -1, err
+		return -1, err
 	}
-	return f, index, nil
+	return index, nil
 }
 
 func SaveExcelAs(f *excelize.File, saveAsName string) error {
