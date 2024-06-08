@@ -50,3 +50,20 @@ func ScanString(promptMsg string) string {
 
 	return scan
 }
+
+func ScanBool(label string) bool {
+	var scan string
+	if label == "" {
+		label = "Would you like to proceed [1/0]? "
+	}
+	if scan != "1" && scan != "0" {
+		fmt.Printf("")
+		fmt.Scanln(&scan)
+		if scan == "1" {
+			return true
+		} else if scan == "0" {
+			return false
+		}
+	}
+	return false
+}
