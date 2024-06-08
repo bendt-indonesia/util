@@ -57,7 +57,7 @@ func ScanBool(label string) bool {
 		label = "Would you like to proceed [1/0]? "
 	}
 	if scan != "1" && scan != "0" {
-		fmt.Printf("")
+		fmt.Printf(label)
 		fmt.Scanln(&scan)
 		if scan == "1" {
 			return true
