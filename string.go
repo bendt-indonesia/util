@@ -24,13 +24,15 @@ func Boolean(str string) bool {
 // HelloWorld
 func CamelCase(str string) string {
 	camelCase := stringy.New(str)
-	return camelCase.CamelCase().Get()
+	sm := camelCase.CamelCase()
+	return sm.Get()
 }
 
 // HelloWorlds
 func CamelCasePlural(str string) string {
 	camelCase := stringy.New(Plural(str))
-	return camelCase.CamelCase().Get()
+	sm := camelCase.CamelCase()
+	return sm.Get()
 }
 
 func CleanStringLowered(str string) string {
