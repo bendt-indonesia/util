@@ -16,7 +16,7 @@ func Float64ToString(s float64, p *int) string {
 		if *p == 0 {
 			f += "d"
 		} else {
-			f += "."+IntToStr(*p)
+			f += "." + IntToStr(*p)
 		}
 	} else {
 		f += "f"
@@ -26,9 +26,9 @@ func Float64ToString(s float64, p *int) string {
 	return str
 }
 
-func IntToLetters(number int32) (letters string){
+func IntToLetters(number int32) (letters string) {
 	number--
-	if firstLetter := number/26; firstLetter >0{
+	if firstLetter := number / 26; firstLetter > 0 {
 		letters += IntToLetters(firstLetter)
 		letters += string('A' + number%26)
 	} else {
@@ -50,14 +50,14 @@ func IntToUint64(n int) uint64 {
 	return uint64(n)
 }
 
-//Boolean func returns boolean value of string value like on, off, 0, 1, yes, no
+// Boolean func returns boolean value of string value like on, off, 0, 1, yes, no
 func StringToInt64(s string) int64 {
 	n, _ := strconv.ParseInt(s, 10, 64)
 
 	return n
 }
 
-//Boolean func returns boolean value of string value like on, off, 0, 1, yes, no
+// Boolean func returns boolean value of string value like on, off, 0, 1, yes, no
 func StringToUint(s string) uint {
 	var branchUint uint
 	branchU64, _ := strconv.ParseUint(s, 10, 32)
@@ -66,8 +66,19 @@ func StringToUint(s string) uint {
 	return branchUint
 }
 
+func StringToUint64(s string) uint64 {
+	num, _ := strconv.ParseUint(s, 10, 64)
+
+	return num
+}
+
+func StringToFloat32(s string) float32 {
+	f, _ := strconv.ParseFloat(s, 32)
+	return float32(f)
+}
+
 func StringToFloat64(s string) float64 {
-	f, _ := strconv.ParseFloat(s,64)
+	f, _ := strconv.ParseFloat(s, 64)
 	return f
 }
 
