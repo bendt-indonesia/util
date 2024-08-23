@@ -227,6 +227,18 @@ func RandomString(length int) string {
 	rand.Read(b)
 	return fmt.Sprintf("%x", b)[:length]
 }
+func RandStringBytes(n int) string {
+	var seededRand *rand.Rand = rand.New(
+		rand.NewSource(time.Now().UnixNano()))
+
+	letterBytes := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letterBytes[seededRand.Intn(len(letterBytes))]
+	}
+	return string(b)
+}
 
 // Remove All WhiteSpace
 func RemoveWhitespace(str string) string {
@@ -300,6 +312,12 @@ func SanitizeStringNumber(s string) string {
 	rg := regexp.MustCompile(`[0-9]+`)
 	matches := rg.FindAllString(s, -1)
 	return strings.Join(matches, "")
+}
+
+func SanitizeNumber(s string) string {
+	re := regexp.MustCompile("[0-9]+")
+	ss := re.FindAllString(s, -1)
+	return strings.Join(ss, "")
 }
 
 func IsUpper(s string) bool {
