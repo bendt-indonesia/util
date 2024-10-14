@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"github.com/go-playground/validator/v10"
 	"net/mail"
 )
 
