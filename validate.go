@@ -2,7 +2,7 @@ package util
 
 import (
 	"fmt"
-	"github.com/go-playground/validator/v10"
+	"net/mail"
 )
 
 func ValidateStruct(i interface{}) error {
@@ -38,4 +38,9 @@ func ValidateStructMapped(i interface{}) map[string][]string {
 		}
 	}
 	return results
+}
+
+func IsValidEmail(email string) bool {
+	_, err := mail.ParseAddress(email)
+	return err == nil
 }

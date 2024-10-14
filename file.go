@@ -14,29 +14,29 @@ import (
 )
 
 func GetImageExt(fullPath string) string {
-	ext  := strings.ToLower(string(fullPath[len(fullPath)-4:]))
+	ext := strings.ToLower(string(fullPath[len(fullPath)-4:]))
 
 	switch ext {
-		case ".jpg":
-			return "jpg"
-		case "jpeg":
-			return "jpeg"
-		case ".png":
-			return "png"
-		case ".svg":
-			return "svg"
-		case ".gif":
-			return "gif"
-		case "heic":
-			return "heic"
-		case "webp":
-			return "webp"
-		case "avif":
-			return "avif"
-		case "apng":
-			return "apng"
-		default:
-			return "jpg"
+	case ".jpg":
+		return "jpg"
+	case "jpeg":
+		return "jpeg"
+	case ".png":
+		return "png"
+	case ".svg":
+		return "svg"
+	case ".gif":
+		return "gif"
+	case "heic":
+		return "heic"
+	case "webp":
+		return "webp"
+	case "avif":
+		return "avif"
+	case "apng":
+		return "apng"
+	default:
+		return "jpg"
 	}
 }
 
@@ -45,6 +45,18 @@ func CheckDirExists(folderPath string) {
 		// path/to/whatever does not exist
 		os.MkdirAll(folderPath, os.ModePerm)
 	}
+}
+
+func CheckFileExists(filename string) bool {
+	_, err := os.Stat(filename)
+	if err == nil {
+		return true
+	}
+	if os.IsNotExist(err) {
+		return false
+	}
+	// For other errors, assume the file doesn't exist
+	return false
 }
 
 func CopyFile(src, dst string) (int64, error) {
@@ -82,12 +94,12 @@ func RemoveDir(folderPath string) error {
 
 func FmtFile(absolutePath string) {
 	if strings.HasSuffix(absolutePath, ".go") {
-		formatter := "/usr/local/go/bin/gofmt -w "+absolutePath
-		cmd :=  exec.Command("bash","-c", formatter)
+		formatter := "/usr/local/go/bin/gofmt -w " + absolutePath
+		cmd := exec.Command("bash", "-c", formatter)
 		_, err := cmd.CombinedOutput()
 		if err != nil {
-			fmt.Println("Execute Failed: "+formatter)
-			panic("Unable to gofmt file "+absolutePath)
+			fmt.Println("Execute Failed: " + formatter)
+			panic("Unable to gofmt file " + absolutePath)
 		}
 	}
 	return
@@ -111,7 +123,7 @@ func WriteFile(folderPath string, fileName string, content string) error {
 	CheckDirExists(folderPath)
 
 	d1 := []byte(content)
-	absoluteFilePath := folderPath+fileName
+	absoluteFilePath := folderPath + fileName
 	err := os.WriteFile(absoluteFilePath, d1, 0644)
 	if err != nil {
 		logrus.Error(err)
