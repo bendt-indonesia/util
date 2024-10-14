@@ -6,7 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.17.45
 	github.com/doug-martin/goqu/v9 v9.19.0
 	github.com/gertd/go-pluralize v0.2.1
-	github.com/go-playground/validator/v10 v10.19.0
+	github.com/go-playground/validator/v10 v10.22.1
 	github.com/gobeam/stringy v0.0.7
 	github.com/google/uuid v1.6.0
 	github.com/linkedin/goavro v2.1.0+incompatible
