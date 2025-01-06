@@ -77,6 +77,18 @@ func RandomNumberString(length int) string {
 	return string(b)
 }
 
+func RandomLetterNumberString(length int, capitalize bool) string {
+	const letterBytes = "0123456789abcdefghijklmnopqrstuvwxyz"
+	b := make([]byte, length)
+	for i := range b {
+		b[i] = letterBytes[rand.Int63()%int64(len(letterBytes))]
+	}
+	if capitalize {
+		return strings.ToUpper(string(b))
+	}
+	return string(b)
+}
+
 // Still Bug
 func FindAvailableSlug(slug string, existing []string) string {
 	i := 0
@@ -100,7 +112,7 @@ func GetFileExt(n string) string {
 func ComposeUploadFileName(n string) string {
 	fileName := GetFileNameWithoutExt(n)
 	fileName = SnakeCase(fileName)
-	
+
 	ext := GetFileExt(n)
 	ts := RandomTimestampStr()
 
