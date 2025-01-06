@@ -19,6 +19,12 @@ func GenerateHMAC(signed string, secret string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
+func EncryptSHA256(s string) string {
+	h := sha256.New()
+	h.Write([]byte(s))
+	return hex.EncodeToString(h.Sum(nil))
+}
+
 func HashPassword(password string) string {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 11)
 

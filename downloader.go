@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-//Filename = override downloaded file name
+// Filename = override downloaded file name
 func DownloadFile(URL string) (*http.Response, error) {
 	response, err := http.Get(URL)
 	if err != nil {
@@ -64,7 +64,7 @@ func DownloadAndSaveFile(URL string, savePath string, saveNameWithExt *string) (
 	return fileName, nil
 }
 
-//FullName, FileName, Ext, Error
+// FullName, FileName, Ext, Error
 func GetFileNameWithExtFromUrl(rawUrl string) (string, string, string, error) {
 	u, err := url.Parse(rawUrl)
 	if err != nil {
@@ -78,14 +78,4 @@ func GetFileNameWithExtFromUrl(rawUrl string) (string, string, string, error) {
 	sp := strings.Split(u.Path, "/")
 	fileNameWithExt := sp[len(sp)-1]
 	return fileNameWithExt, fileNameWithExt[0 : len(fileNameWithExt)-len(fileExt)-1], fileExt, nil
-}
-
-func IsValidURL(URL string) bool {
-	_, err := url.ParseRequestURI(URL)
-	if err != nil {
-		return false
-	}
-
-	return true
-
 }

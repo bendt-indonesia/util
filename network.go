@@ -3,6 +3,7 @@ package util
 import (
 	"net"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -34,4 +35,24 @@ func GetIP(r *http.Request) string {
 		return ip
 	}
 	return ""
+}
+
+func IsValidURL(URL string) bool {
+	_, err := url.ParseRequestURI(URL)
+	if err != nil {
+		return false
+	}
+
+	return true
+}
+
+func SafeGet(param url.Values, key string) string {
+	if param == nil {
+		return ""
+	}
+	vs, ok := param[key]
+	if !ok || len(vs) == 0 {
+		return ""
+	}
+	return vs[0]
 }
