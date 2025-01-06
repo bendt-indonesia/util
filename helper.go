@@ -99,6 +99,8 @@ func GetFileExt(n string) string {
 
 func ComposeUploadFileName(n string) string {
 	fileName := GetFileNameWithoutExt(n)
+	fileName = SnakeCase(fileName)
+	
 	ext := GetFileExt(n)
 	ts := RandomTimestampStr()
 
@@ -110,6 +112,8 @@ func ComposeUploadFileNameV2(n string, aliasName *string) string {
 	if aliasName != nil {
 		fileName = *aliasName
 	}
+
+	fileName = SnakeCase(fileName)
 
 	ext := GetFileExt(n)
 	ts := RandomTimestampStr()
