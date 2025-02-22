@@ -57,13 +57,8 @@ func SanitizeDomain(original string, preserveCase bool, removeWww bool) (string,
 	return string(domainRegExp.ReplaceAll([]byte(strings.ToLower(u.Host)), emptySpace)), nil
 }
 
+// Make sure to SanitizeDomain before call this
 func ExtractTLD(name string) string {
-	var err error
-	name, err = SanitizeDomain(name, false, true)
-	if err != nil {
-		return ""
-	}
-
 	if strings.Contains(name, ".") {
 		splitted := strings.Split(name, ".")
 		tld1 := "." + splitted[len(splitted)-1]
@@ -103,6 +98,18 @@ func ExtractDomainNameWithoutExt(domainName string) string {
 func IsDomainIsDotIdExtension(domainName string) bool {
 	ext := ExtractTLD(domainName)
 	return funk.ContainsString(DotIdExtensions, ext)
+}
+
+func IsDomainSubdomain(name string) (bool, error) {
+	var err error
+	name, err = SanitizeDomain(name, false, true)
+	if err != nil {
+		return false, err
+	}
+
+	tld := ExtractTLD(name)
+	cleanWithoutTld := TrimSuffix(name, tld)
+	return strings.Contains(cleanWithoutTld, "."), nil
 }
 
 func SanitizeDotExtensions(text string) string {
