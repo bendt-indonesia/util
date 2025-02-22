@@ -57,11 +57,31 @@ func SanitizeDomain(original string, preserveCase bool, removeWww bool) (string,
 	return string(domainRegExp.ReplaceAll([]byte(strings.ToLower(u.Host)), emptySpace)), nil
 }
 
-func ExtractTLD(domainName string) string {
-	san := SanitizeDotExtensions(domainName)
-	if strings.Contains(san, ".") {
-		idx := strings.Index(san, ".")
-		return san[idx:]
+func ExtractTLD(name string) string {
+	var err error
+	name, err = SanitizeDomain(name, false, true)
+	if err != nil {
+		return ""
+	}
+
+	if strings.Contains(name, ".") {
+		splitted := strings.Split(name, ".")
+		tld1 := "." + splitted[len(splitted)-1]
+		if len(splitted) == 2 {
+			return tld1
+		}
+
+		tld2 := "." + splitted[len(splitted)-2] + tld1
+		tlds := []string{
+			".ac.id", ".ae.org", ".biz.id", ".br.com", ".cn.com", ".co.com", ".co.gg", ".co.id", ".co.in", ".co.je", ".co.uk", ".com.ai", ".com.de", ".com.se",
+			".de.com", ".desa.id", ".eu.com", ".firm.in", ".gb.net", ".gen.in", ".gr.com", ".hu.net", ".in.net", ".ind.in", ".jp.net", ".jpn.com", ".me.uk",
+			".mex.com", ".my.id", ".net.ai", ".net.gg", ".net.in", ".net.je", ".off.ai", ".or.id", ".org.ai", ".org.gg", ".org.in", ".org.je", ".org.uk",
+			".ponpes.id", ".radio.am", ".radio.fm", ".ru.com", ".sa.com", ".sch.id", ".se.net", ".uk.com", ".uk.net", ".us.com", ".us.org", ".web.id", ".za.com",
+		}
+		if funk.ContainsString(tlds, tld2) {
+			return tld2
+		}
+		return tld1
 	}
 
 	return ""
