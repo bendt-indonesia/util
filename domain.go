@@ -102,7 +102,8 @@ func IsDomainIsDotIdExtension(domainName string) bool {
 
 func IsDomainSubdomain(name string) (bool, error) {
 	var err error
-	name, err = SanitizeDomain(name, false, true)
+	//www will be treated as subdomain
+	name, err = SanitizeDomain(name, false, false)
 	if err != nil {
 		return false, err
 	}
