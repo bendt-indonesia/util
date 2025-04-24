@@ -3,7 +3,6 @@ module github.com/bendt-indonesia/util
 go 1.19
 
 require (
-	github.com/99designs/gqlgen v0.17.45
 	github.com/doug-martin/goqu/v9 v9.19.0
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/go-playground/validator/v10 v10.22.1
