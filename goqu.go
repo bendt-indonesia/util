@@ -94,7 +94,7 @@ func GoqWhereSyntaxQuery(s interface{}, binaryCols []string) ([]exp.Expression, 
 		//Check where name by using db tag
 		fd := rt.Field(i).Tag.Get("db")
 		tp := rt.Field(i).Type.String()
-		if fd == "" || tp != "*model.SearchSyntax" {
+		if fd == "" || !strings.Contains(tp, "SearchSyntax") {
 			continue
 		}
 
@@ -139,7 +139,7 @@ func GoqWhereSyntaxQueryV2(s interface{}, whereExp []exp.Expression, orWhereExp 
 		//Check where name by using db tag
 		fd := rt.Field(i).Tag.Get("db")
 		tp := rt.Field(i).Type.String()
-		if fd == "" || tp != "*model.SearchSyntax" {
+		if fd == "" || !strings.Contains(tp, "SearchSyntax") {
 			continue
 		}
 
@@ -187,7 +187,7 @@ func GoqWhereQuotedSyntaxQuery(s interface{}, binaryCols []string, quotedCols []
 		//Check where name by using db tag
 		fd := rt.Field(i).Tag.Get("db")
 		tp := rt.Field(i).Type.String()
-		if fd == "" || tp != "*model.SearchSyntax" {
+		if fd == "" || !strings.Contains(tp, "SearchSyntax") {
 			continue
 		}
 
